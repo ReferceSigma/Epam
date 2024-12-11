@@ -1,0 +1,4 @@
+Sedan,Toyota,Camry,30000,7.5,210
+SUV,BMW,X5,60000,9.0,240
+Hatchback,Ford,Focus,20000,6.5,190
+Sedan,Hyundai,Sonata,28000,7.2,200
