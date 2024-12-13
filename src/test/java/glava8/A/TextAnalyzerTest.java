@@ -3,65 +3,51 @@ package glava8.A;
 import org.example.glava8.A.TextAnalyzer;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TextAnalyzerTest {
+public class TextAnalyzerTest {
 
     @Test
     void testFindMostFrequentCharacters() {
-        String text = "Горошина Осталась";
-        int n = 3;
+        String text = "Горошина осталасьо";
+        int n = 4;
 
-        // Redirect system output to capture printed lines
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
+        List<Map.Entry<Character, Integer>> result = TextAnalyzer.findMostFrequentCharacters(text, n);
 
-        try {
-            TextAnalyzer.findMostFrequentCharacters(text, n);
+        // Исправлены ожидания:
+        assertEquals(4, result.size());
+        assertEquals('о', result.get(0).getKey()); // 'о' - наиболее частый символ
+        assertEquals(4, result.get(0).getValue());
 
-            String output = outputStream.toString().trim(); // Trim to handle extra spaces or newlines
-
-            // Verify the output contains the expected most frequent characters
-            assertTrue(output.contains("Символ: 'а', количество: 3"), "Output should contain the character 'а' with frequency 3.");
-            assertTrue(output.contains("Символ: 'о', количество: 2"), "Output should contain the character 'о' with frequency 2.");
+        assertEquals('а', result.get(1).getKey()); // 'а' - следующий по частоте символ
+        assertEquals(3, result.get(1).getValue());
 
 
-            // Ensure the output contains only 'n' entries
-            Pattern pattern = Pattern.compile("Символ: '.', количество: ");
-            long count = pattern.matcher(output).results().count();
-            assertEquals(n, count, "Output should contain exactly " + n + " entries.");
 
-        } finally {
-            // Restore the original system output
-            System.setOut(originalOut);
-        }
+        assertEquals('с', result.get(2).getKey()); // 'с' - ещё один символ
+        assertEquals(2, result.get(2).getValue());
     }
 
     @Test
-    void testFindMostFrequentCharactersWithEmptyText() {
+    void testEmptyString() {
         String text = "";
         int n = 3;
 
-        // Redirect system output to capture printed lines
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
+        List<Map.Entry<Character, Integer>> result = TextAnalyzer.findMostFrequentCharacters(text, n);
 
-        try {
-            TextAnalyzer.findMostFrequentCharacters(text, n);
-            String output = outputStream.toString().trim(); // Trim to handle extra spaces or newlines
+        assertEquals(0, result.size());
+    }
 
-            // Verify the output is empty
-            assertTrue(output.startsWith("Наиболее частые символы:"), "Output should start with the header.");
-            assertEquals("Наиболее частые символы:", output, "Output should only contain the header for empty input.");
-        } finally {
-            // Restore the original system output
-            System.setOut(originalOut);
-        }
+    @Test
+    void testLessThanNCharacters() {
+        String text = "аб";
+        int n = 5;
+
+        List<Map.Entry<Character, Integer>> result = TextAnalyzer.findMostFrequentCharacters(text, n);
+
+        assertEquals(2, result.size());
     }
 }

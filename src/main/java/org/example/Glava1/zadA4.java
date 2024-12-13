@@ -1,15 +1,19 @@
 package org.example.Glava1;
 
-import java.util.Scanner;
-
 public class zadA4 {
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Ошибка: Укажите пароль в качестве аргумента.");
+            return;
+        }
 
-Scanner scanner = new Scanner(System.in);
-        System.out.print("Введите пароль: ");
-String password1 = scanner.next();
-String password2 = "password";
-        if (password1.equals(password2))
-        System.out.println("Пароль верный");
-        else System.out.println("Пароль неверный");}
+        String inputPassword = args[0];
+        String correctPassword = "password";
+
+        if (inputPassword.equals(correctPassword)) {
+            System.out.println("Пароль верный");
+        } else {
+            System.out.println("Пароль неверный");
+        }
+    }
 }

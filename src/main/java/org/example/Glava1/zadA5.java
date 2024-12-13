@@ -1,16 +1,27 @@
 package org.example.Glava1;
 
-import java.util.Scanner;
-
 public class zadA5 {
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        for (int i = 0; true; i++) {
-            int x = input.nextInt();
-            int y = input.nextInt();
-
-            System.out.println("Sum = " + (x + y));
-            System.out.println("Multiply = " + (x * y));
+        if (args.length == 0) {
+            System.out.println("Ошибка: Введите целые числа в качестве аргументов.");
+            return;
         }
+
+        int sum = 0;
+        int product = 1;
+
+        try {
+            for (String arg : args) {
+                int number = Integer.parseInt(arg);
+                sum += number;
+                product *= number;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: Все аргументы должны быть целыми числами.");
+            return;
+        }
+
+        System.out.println("Сумма чисел = " + sum);
+        System.out.println("Произведение чисел = " + product);
     }
 }
