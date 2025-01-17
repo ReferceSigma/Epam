@@ -10,7 +10,7 @@ public class ImageTransferServer {
 
     public static void main(String[] args) {
         int port = 12345;
-        Path filePath = Path.of("C:\\Users\\sulti\\IdeaProjects\\JavaEPim\\src\\main\\java\\org\\example\\glava14\\A\\image_to_send.png"); // Заранее подготовленный файл для отправки
+        Path filePath = Path.of("src/main/java/org/example/glava14/A/image_to_send.png"); // Заранее подготовленный файл для отправки
 
         if (!Files.exists(filePath)) {
             System.err.println("Файл для отправки не найден: " + filePath.toAbsolutePath());

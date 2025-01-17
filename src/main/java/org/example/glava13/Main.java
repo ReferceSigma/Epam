@@ -1,41 +1,40 @@
 package org.example.glava13;
 
-
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.sql.*;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        List<City> cities = Arrays.asList(
-                new City("Москва", 1147, 2511.0, Arrays.asList(
-                        new ResidentType("Рабочий", "Русский", 5000000),
-                        new ResidentType("Фермер", "Русский", 200000)
-                )),
-                new City("Париж", 508, 105.4, Arrays.asList(
-                        new ResidentType("Художник", "Французский", 300000),
-                        new ResidentType("Фермер", "Французский", 100000)
-                ))
-        );
+        try (Connection conn = DatabaseManager.getConnection()) {
 
-        CityRepository repository = new CityRepository(cities);
+            DatabaseInitializer.initializeDatabase();
 
-        System.out.println("Жители Москвы, говорящие на русском:");
-        List<ResidentType> residents = repository.getResidentsByCityAndLanguage("Москва", "Русский");
-        residents.forEach(System.out::println);
+            WeatherDAO weatherDAO = new WeatherDAO(conn);
 
-        System.out.println("\nГорода, где есть фермеры:");
-        List<City> citiesWithFarmers = repository.getCitiesByResidentType("Фермер");
-        citiesWithFarmers.forEach(System.out::println);
+            System.out.println("Погода в определенном регионе:");
+            weatherDAO.getWeatherByRegion("Санкт-Петербург");
 
-        System.out.println("\nГород с населением 5000000:");
-        Optional<City> cityByPopulation = repository.getCityByPopulation(5000000);
-        cityByPopulation.ifPresent(System.out::println);
+            System.out.println("\nДаты со снегом и температурой ниже -5:");
+            weatherDAO.getSnowDates("Москва", -5);
 
-        System.out.println("\nСамый древний тип жителей:");
-        Optional<ResidentType> oldestResidentType = repository.getOldestResidentType();
-        oldestResidentType.ifPresent(System.out::println);
+            System.out.println("\nПогода в регионах, где языком является англиский:");
+            weatherDAO.getWeatherByLanguage("Английский");
+
+            System.out.println("\nСредняя температура в регионах площадью > 500 за последнюю неделю:");
+            weatherDAO.getAverageTemperature(500);
+
+            WeatherModifier weatherModifier = new WeatherModifier();
+            Date date = Date.valueOf("2025-01-05");
+            weatherModifier.addWeatherData(1, date, -3.0, "снег");
+
+            System.out.println("\nОбновленная погода для Санкт-Петербурга:");
+            weatherDAO.getWeatherByRegion("Санкт-Петербург");
+
+            Scanner scanner = new Scanner(System.in);
+            scanner.nextLine();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
-
